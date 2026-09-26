@@ -1,0 +1,10 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "name": "Sample bike shop (replace me)", "type": "shop", "address": "123 Example St", "hours": "Tue–Sat 10–6" },
+      "geometry": { "type": "Point", "coordinates": [-120.482, 37.303] }
+    }
+  ]
+}

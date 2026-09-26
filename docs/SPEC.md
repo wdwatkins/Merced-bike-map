@@ -12,7 +12,8 @@ route line on the map picks up its style from those definitions.
 ## 1. Goals and non-goals
 
 **Goals (v1)**
-- Pan/zoom map of Merced, centered on downtown, covering the city limits and UC Merced.
+- Pan/zoom map of Merced covering roughly the city limits: Mission Avenue (south) to
+  Lake Yosemite (northeast).
 - Route lines styled by category (e.g. off-street path, protected lane, bike lane,
   bike route/sharrow, "use caution") using colors you choose.
 - A legend generated from the same color definitions, with toggles to show/hide each category.
@@ -137,9 +138,8 @@ Change a color once and every route in that category updates, along with the leg
 {
   "map": {
     "title": "Merced Bike Map",
-    "center": [-120.4830, 37.3022],
-    "zoom": 13,
-    "bounds": [[-120.56, 37.25], [-120.39, 37.39]]
+    "homeBounds": [[-120.545, 37.262], [-120.415, 37.380]],
+    "maxBounds": [[-120.640, 37.200], [-120.320, 37.440]]
   },
   "categories": [
     {
@@ -210,11 +210,11 @@ Fields:
 > blue/park green shades. Check the palette with a color-blindness simulator
 > (e.g. Coblis) — don't rely on red vs. green alone; the dash patterns help here.
 
-### Want each *named route* to have its own color instead?
-Some maps color by route ("Bear Creek Loop" = orange, "UC Merced Connector" = teal) rather
-than by facility type. The same design supports that: add an optional `color` property on
-an individual feature. The map uses **feature color if present, otherwise the category
-color**. Decide which model you want as the primary one (see §10 questions).
+**Decision:** routes are colored **by type only**. There is no per-route color override;
+a route's look comes entirely from its category.
+
+The categories in the repo are placeholders (path, lane, route, caution) until the final
+list is chosen.
 
 ### `data/routes.geojson` — one Feature per segment
 
@@ -229,8 +229,7 @@ color**. Decide which model you want as the primary one (see §10 questions).
         "name": "Bear Creek Bike Path",
         "category": "trail",
         "surface": "paved",
-        "notes": "Runs along Bear Creek; lighting varies.",
-        "color": null
+        "notes": "Runs along Bear Creek; lighting varies."
       },
       "geometry": {
         "type": "LineString",
@@ -242,8 +241,7 @@ color**. Decide which model you want as the primary one (see §10 questions).
 ```
 
 Required properties: `id`, `name`, `category` (must match a config `id`).
-Optional: `surface`, `notes`, `color` (override), `url` (link for more info),
-`status` (`existing` / `planned`).
+Optional: `surface`, `notes`, `url` (link for more info).
 
 **Segment rule:** a route that changes facility type partway (e.g. trail → bike lane) is
 split into separate features, one per category. Features can share the same `name`.
@@ -293,7 +291,6 @@ Candidate sources, best first — verify currency of each:
 
 ### 6.2 Your decisions
 - Final category list, labels, and **hex colors** (fill in `routes.config.json`).
-- Coloring model: by facility type, by named route, or both (feature override).
 - Criteria for the "use caution" category (e.g. arterials with ≥ 35 mph and no bike lane).
 - Map extent: city limits only, or include UC Merced, Atwater, Lake Yosemite?
 - Whether to show planned facilities.
@@ -318,7 +315,7 @@ legend (with checkbox toggle per category), POI toggles, and an "About" link.
 content. Popups are compact and dismissable.
 
 **Map behavior**
-- Initial view: `map.center` / `map.zoom` from config; pan limited to `map.bounds`.
+- Initial view fits `map.homeBounds` from config; panning is limited to `map.maxBounds`.
 - Line widths scale with zoom (thin when zoomed out, thicker zoomed in).
 - Each route line drawn with a thin white casing underneath so it reads clearly over the
   basemap (the BikePGH look).
@@ -341,16 +338,17 @@ How colors from config drive the map (MapLibre):
 ```js
 const cfg = await (await fetch('data/routes.config.json')).json();
 
-// ["match", ["get","category"], "trail", "#1b7837", "lane", "#4393c3", ..., "#888"]
-const colorByCategory = ['match', ['get', 'category'],
-  ...cfg.categories.flatMap(c => [c.id, c.color]), '#888888'];
-
-// Feature-level override, falling back to the category color
-const lineColor = ['coalesce', ['get', 'color'], colorByCategory];
+for (const cat of cfg.categories) {
+  map.addLayer({
+    id: `route-${cat.id}`, type: 'line', source: 'routes',
+    filter: ['==', ['get', 'category'], cat.id],
+    paint: { 'line-color': cat.color, 'line-width': cat.width, 'line-dasharray': cat.dash },
+  });
+}
 ```
 
-MapLibre can't vary `line-dasharray` per feature via expressions reliably, so create
-**one line layer per category** (filtered on `category`), each with its own color, width,
+MapLibre can't vary `line-dasharray` per feature via expressions reliably, so the app
+creates **one line layer per category** (filtered on `category`), each with its own color, width,
 and dash from config. That also makes legend toggles trivial: toggling a category sets
 its layer's `visibility`.
 
@@ -359,7 +357,7 @@ its layer's `visibility`.
 - every `category` exists in the config;
 - `id`s are unique;
 - colors are valid hex;
-- geometries are LineString/MultiLineString inside `map.bounds`.
+- geometries are LineString/MultiLineString inside `map.maxBounds`.
 
 ---
 
@@ -377,12 +375,14 @@ its layer's `visibility`.
 
 ---
 
-## 10. Open questions for you
+## 10. Decisions and open questions
 
-1. Color by **facility type**, by **named route**, or type with per-route overrides?
-2. What categories do you want (start from the six in §5, or your own list)?
-3. Your preferred colors for each category?
-4. Extent: City of Merced only, or include UC Merced / Lake Yosemite / Atwater?
-5. Do you already have any route data (GIS files, KML from Google My Maps, GPX rides)?
-   All of those can be converted to GeoJSON.
-6. Custom domain, or is `<username>.github.io/merced-bike-map` fine?
+**Decided**
+- Color by route type (category) only.
+- Extent: Mission Avenue to Lake Yosemite, roughly the city limits.
+- All routes are authored by hand. Main workflow: plan in Ride with GPS with
+  snap-to-road, export GPX, import with `scripts/add-route.js` (see README).
+
+**Open**
+1. Final category list, labels, and colors (placeholders for now).
+2. Custom domain, or is `<username>.github.io/merced-bike-map` fine?

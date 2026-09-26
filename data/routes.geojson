@@ -1,0 +1,25 @@
+{
+  "type": "FeatureCollection",
+  "features": [
+    {
+      "type": "Feature",
+      "properties": { "id": "sample-path", "name": "Sample path (replace me)", "category": "path", "surface": "paved", "notes": "Placeholder geometry. Delete once real routes are added." },
+      "geometry": { "type": "LineString", "coordinates": [[-120.520, 37.300], [-120.500, 37.302], [-120.480, 37.305], [-120.460, 37.309], [-120.440, 37.312]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "sample-lane", "name": "Sample bike lane (replace me)", "category": "lane", "notes": "Placeholder geometry." },
+      "geometry": { "type": "LineString", "coordinates": [[-120.483, 37.275], [-120.483, 37.300], [-120.482, 37.330], [-120.470, 37.350], [-120.440, 37.368]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "sample-route", "name": "Sample bike route (replace me)", "category": "route", "notes": "Placeholder geometry." },
+      "geometry": { "type": "LineString", "coordinates": [[-120.530, 37.330], [-120.500, 37.330], [-120.470, 37.330]] }
+    },
+    {
+      "type": "Feature",
+      "properties": { "id": "sample-caution", "name": "Sample caution street (replace me)", "category": "caution", "notes": "Placeholder geometry." },
+      "geometry": { "type": "LineString", "coordinates": [[-120.510, 37.285], [-120.470, 37.285], [-120.440, 37.290]] }
+    }
+  ]
+}

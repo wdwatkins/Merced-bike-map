@@ -1,0 +1,10 @@
+{
+  "name": "merced-bike-map",
+  "private": true,
+  "description": "Interactive map of bike routes in Merced, CA",
+  "scripts": {
+    "validate": "node scripts/validate.js",
+    "add-route": "node scripts/add-route.js",
+    "serve": "python3 -m http.server 8000"
+  }
+}

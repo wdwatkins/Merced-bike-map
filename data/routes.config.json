@@ -1,0 +1,19 @@
+{
+  "map": {
+    "title": "Merced Bike Map",
+    "homeBounds": [[-120.545, 37.262], [-120.415, 37.380]],
+    "maxBounds": [[-120.640, 37.200], [-120.320, 37.440]]
+  },
+  "categories": [
+    { "id": "path",    "label": "Off-street path (placeholder)",  "color": "#1b7837", "width": 5, "dash": null,     "order": 1 },
+    { "id": "lane",    "label": "Bike lane (placeholder)",        "color": "#2166ac", "width": 4, "dash": null,     "order": 2 },
+    { "id": "route",   "label": "Bike route (placeholder)",       "color": "#8e44ad", "width": 3, "dash": [2, 1.5], "order": 3 },
+    { "id": "caution", "label": "Use caution (placeholder)",      "color": "#d6604d", "width": 3, "dash": [1, 1],   "order": 4 }
+  ],
+  "poiTypes": [
+    { "id": "shop",    "label": "Bike shop",      "color": "#e08214" },
+    { "id": "parking", "label": "Bike parking",   "color": "#4d4d4d" },
+    { "id": "repair",  "label": "Repair station", "color": "#b2182b" },
+    { "id": "water",   "label": "Water",          "color": "#1f78b4" }
+  ]
+}

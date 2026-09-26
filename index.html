@@ -1,0 +1,36 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Merced Bike Map</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.css">
+  <link rel="stylesheet" href="src/style.css">
+</head>
+<body>
+  <div id="map" role="region" aria-label="Map of Merced bike routes"></div>
+
+  <button id="panel-toggle" class="panel-toggle" aria-controls="panel" aria-expanded="true">Legend</button>
+
+  <aside id="panel" class="panel">
+    <header class="panel-header">
+      <h1 id="map-title">Merced Bike Map</h1>
+      <button id="panel-close" class="panel-close" aria-label="Close legend">&times;</button>
+    </header>
+    <section>
+      <h2>Routes</h2>
+      <ul id="legend" class="legend"></ul>
+    </section>
+    <section>
+      <h2>Places</h2>
+      <ul id="poi-legend" class="legend"></ul>
+    </section>
+    <footer class="panel-footer">
+      <p>Conditions change. Ride with care and use your own judgment.</p>
+    </footer>
+  </aside>
+
+  <script src="https://cdn.jsdelivr.net/npm/maplibre-gl@5.24.0/dist/maplibre-gl.js"></script>
+  <script src="src/app.js"></script>
+</body>
+</html>
