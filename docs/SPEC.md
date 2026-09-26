@@ -292,7 +292,6 @@ Candidate sources, best first — verify currency of each:
 ### 6.2 Your decisions
 - Final category list, labels, and **hex colors** (fill in `routes.config.json`).
 - Criteria for the "use caution" category (e.g. arterials with ≥ 35 mph and no bike lane).
-- Map extent: city limits only, or include UC Merced, Atwater, Lake Yosemite?
 - Whether to show planned facilities.
 
 ### 6.3 Points of interest
