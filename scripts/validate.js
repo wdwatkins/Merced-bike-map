@@ -49,7 +49,6 @@ routes.features.forEach((f, i) => {
   if (!p.id) errors.push(`${where} is missing "id"`);
   else if (routeIds.has(p.id)) errors.push(`Duplicate route id "${p.id}"`);
   routeIds.add(p.id);
-  if (!p.name) errors.push(`${where} is missing "name"`);
   if (!catIds.has(p.category)) errors.push(`${where} has unknown category "${p.category}"`);
   usedCats.add(p.category);
 

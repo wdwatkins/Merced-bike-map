@@ -92,6 +92,7 @@ html, body {
 .popup-title { font-weight: 600; font-size: 1rem; margin: 0 0 4px; }
 .popup-cat { display: flex; align-items: center; gap: 6px; color: var(--muted); margin-bottom: 4px; }
 .popup-swatch { width: 18px; height: 4px; border-radius: 2px; display: inline-block; }
+.popup-cat-title { display: flex; align-items: center; gap: 8px; }
 .popup-row { margin: 2px 0; }
 .popup a { color: var(--accent); }
 

@@ -37,14 +37,18 @@ the routes that use it too (`npm run validate` will list any you miss).
 3. Run:
 
    ```sh
-   node scripts/add-route.js ~/Downloads/g-street.gpx --category lane --name "G Street"
+   node scripts/add-route.js ~/Downloads/g-street.gpx --category lane
    ```
 
-   Optional flags: `--surface paved`, `--notes "..."`, `--url https://...`,
-   `--id g-street-north` (to keep two segments with the same name distinct).
-   Running it again with the same id (by default, the name in lowercase with
-   dashes) replaces that route, so you can fix a route by re-exporting it.
-   GeoJSON files (from brouter-web or geojson.io) work too.
+   Riders never see route names. The map only shows each line's category (how
+   safe or comfortable it is). Each route gets an internal id so you can find
+   and replace it later; it defaults to the file name (`g-street`), or you can
+   set it with `--id g-street-north`. Running the command again with the same
+   id replaces that route, so you can fix a route by re-exporting it.
+
+   Optional flags: `--notes "..."` (shown when a rider taps the line, for
+   example "Fast traffic near the freeway ramp"), `--surface gravel`,
+   `--url https://...`. GeoJSON files (from brouter-web or geojson.io) work too.
 4. Check your work: `npm run validate`, then preview locally (below).
 
 The importer simplifies tracks (default 3 m tolerance), which removes GPS jitter

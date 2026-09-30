@@ -3,12 +3,13 @@
 // e.g. one exported from Ride with GPS, Strava, Komoot, or brouter-web.
 //
 // Usage:
-//   node scripts/add-route.js <file.gpx|file.geojson> --category lane --name "G Street" [options]
+//   node scripts/add-route.js <file.gpx|file.geojson> --category lane [options]
 //
 // Options:
 //   --category <id>   required; must match an id in data/routes.config.json
-//   --name <text>     required; shown in the popup
-//   --id <slug>       defaults to a slug of the name; an existing route with this id is replaced
+//   --id <slug>       internal identifier, never shown on the map. Defaults to the input
+//                     file name (g-street.gpx -> g-street). An existing route with this
+//                     id is replaced.
 //   --surface <text>  e.g. paved, gravel
 //   --notes <text>    free text shown in the popup
 //   --url <https://>  "More info" link
@@ -116,7 +117,6 @@ function main() {
   const file = args._[0];
   if (!file) fail('Provide an input file. See the usage notes at the top of scripts/add-route.js.');
   if (!args.category) fail('--category is required');
-  if (!args.name) fail('--name is required');
 
   const config = readJson(CONFIG_PATH);
   const ids = config.categories.map((c) => c.id);
@@ -139,8 +139,9 @@ function main() {
     .filter((l) => l.length >= 2);
   const after = lines.reduce((n, l) => n + l.length, 0);
 
-  const id = args.id || slugify(args.name);
-  const properties = { id, name: args.name, category: args.category };
+  const id = slugify(args.id || path.basename(file, path.extname(file)));
+  if (!id) fail('Could not make an id from the file name; pass --id');
+  const properties = { id, category: args.category };
   for (const key of ['surface', 'notes', 'url']) if (args[key]) properties[key] = args[key];
 
   const feature = {
@@ -157,7 +158,7 @@ function main() {
   else routes.features.push(feature);
   writeFeatureCollection(ROUTES_PATH, routes);
 
-  console.log(`${existing >= 0 ? 'Replaced' : 'Added'} route "${args.name}" (id: ${id}, category: ${args.category})`);
+  console.log(`${existing >= 0 ? 'Replaced' : 'Added'} route "${id}" (category: ${args.category})`);
   console.log(`${lines.length} line(s), ${before} points simplified to ${after}`);
 }
 

@@ -14,10 +14,12 @@ route line on the map picks up its style from those definitions.
 **Goals (v1)**
 - Pan/zoom map of Merced covering roughly the city limits: Mission Avenue (south) to
   Lake Yosemite (northeast).
-- Route lines styled by category (e.g. off-street path, protected lane, bike lane,
-  bike route/sharrow, "use caution") using colors you choose.
+- **The map's job is to show where it's safe to ride.** Route lines are styled by
+  category (e.g. off-street path, protected lane, bike lane, bike route/sharrow,
+  "use caution") using colors you choose. Route names are not shown; riders read
+  the map by color alone.
 - A legend generated from the same color definitions, with toggles to show/hide each category.
-- Click/tap a route for a popup: name, category, surface, notes.
+- Click/tap a route for a popup: category, plus surface and notes when present.
 - Points of interest layer: bike shops, bike parking, repair stations, water.
 - Works well on phones (most people will look at it while riding or planning a ride).
 - Free to host, no server to maintain.
@@ -72,7 +74,7 @@ Drawing lines freehand gives wobbly routes that don't follow streets. Better opt
 1. **[brouter-web](https://brouter.de/brouter-web/)** — click start/end/waypoints and it
    snaps the line to real streets and paths from OpenStreetMap. Export as GeoJSON or GPX.
    **Best choice for tracing each route.**
-2. **[geojson.io](https://geojson.io)** — quick editing of properties (name, category) and
+2. **[geojson.io](https://geojson.io)** — quick editing of properties (category, notes) and
    small fixes; also good for placing POIs.
 3. **[QGIS](https://qgis.org/)** (free desktop GIS) — best if you'll import City/County GIS
    data, clip it, clean it, and bulk-edit attributes.
@@ -226,7 +228,6 @@ list is chosen.
       "type": "Feature",
       "properties": {
         "id": "bear-creek-01",
-        "name": "Bear Creek Bike Path",
         "category": "trail",
         "surface": "paved",
         "notes": "Runs along Bear Creek; lighting varies."
@@ -240,11 +241,11 @@ list is chosen.
 }
 ```
 
-Required properties: `id`, `name`, `category` (must match a config `id`).
-Optional: `surface`, `notes`, `url` (link for more info).
+Required properties: `id` (internal only, never shown to riders) and `category` (must
+match a config `id`). Optional: `surface`, `notes`, `url` (link for more info).
 
 **Segment rule:** a route that changes facility type partway (e.g. trail → bike lane) is
-split into separate features, one per category. Features can share the same `name`.
+split into separate features, one per category, each with its own `id`.
 
 ### `data/pois.geojson`
 
@@ -318,7 +319,7 @@ content. Popups are compact and dismissable.
 - Line widths scale with zoom (thin when zoomed out, thicker zoomed in).
 - Each route line drawn with a thin white casing underneath so it reads clearly over the
   basemap (the BikePGH look).
-- Hover (desktop) highlights a segment; click opens popup: **name**, category label with
+- Hover (desktop) highlights a segment; click opens popup: category label with
   color swatch, surface, notes, link.
 - POIs appear at zoom ≥ 14 to avoid clutter; icons per `type`.
 - Controls: zoom +/−, locate-me, fullscreen, scale bar. Attribution for basemap + OSM.
@@ -352,7 +353,7 @@ and dash from config. That also makes legend toggles trivial: toggling a categor
 its layer's `visibility`.
 
 **Validation script (optional, `scripts/validate.js`)**, run locally and in CI:
-- every feature has `id`, `name`, `category`;
+- every route has `id` and `category` (POIs need `name` and `type`);
 - every `category` exists in the config;
 - `id`s are unique;
 - colors are valid hex;

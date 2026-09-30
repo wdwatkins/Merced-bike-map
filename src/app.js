@@ -225,9 +225,9 @@ function wireInteractions(map, categories, categoryById, poiTypes) {
 
 function routePopup(p, categoryById) {
   const cat = categoryById[p.category];
+  // Routes are identified to riders only by their category; the id is internal.
   return `<div class="popup">
-    <p class="popup-title">${escapeHtml(p.name)}</p>
-    ${cat ? `<div class="popup-cat"><span class="popup-swatch" style="background:${cat.color}"></span>${escapeHtml(cat.label)}</div>` : ''}
+    ${cat ? `<p class="popup-title popup-cat-title"><span class="popup-swatch" style="background:${cat.color}"></span>${escapeHtml(cat.label)}</p>` : ''}
     ${p.surface ? `<p class="popup-row">Surface: ${escapeHtml(p.surface)}</p>` : ''}
     ${p.notes ? `<p class="popup-row">${escapeHtml(p.notes)}</p>` : ''}
     ${safeUrl(p.url) ? `<p class="popup-row"><a href="${escapeHtml(p.url)}" target="_blank" rel="noopener">More info</a></p>` : ''}
